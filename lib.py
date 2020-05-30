@@ -25,3 +25,17 @@ def build_prob_df(num_iterations, q_u, q_d):
             prob_df.iloc[state_idx, time_idx] = val
 
     return prob_df
+
+def calc_period_length(time_years, num_iterations):
+    h = time_years / num_iterations
+    return h
+
+def calc_multipliers(sigma, period_length):
+    up_mul = np.exp(sigma * np.sqrt(period_length))
+    down_mul = np.exp(-sigma * np.sqrt(period_length))
+    return up_mul, down_mul
+
+def calc_prob(up_mul, down_mul, rf, period_length):
+    q_u = (np.exp(rf * period_length) - down_mul)/(up_mul - down_mul)
+    q_d = 1 - q_u
+    return q_u, q_d
