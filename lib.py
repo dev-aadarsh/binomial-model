@@ -39,3 +39,22 @@ def calc_prob(up_mul, down_mul, rf, period_length):
     q_u = (np.exp(rf * period_length) - down_mul)/(up_mul - down_mul)
     q_d = 1 - q_u
     return q_u, q_d
+
+def calc_eu_call_price(init_price, time_years, num_iterations, sigma, rf, strike_price):
+    period_length = calc_period_length(time_years, num_iterations)
+    up_mul, down_mul = calc_multipliers(sigma, period_length)
+
+    price_df = build_price_df(init_price, up_mul, down_mul, num_iterations)
+    price_df
+
+    q_u, q_d = calc_prob(up_mul, down_mul, rf, period_length)
+
+    prob_df = build_prob_df(num_iterations, q_u, q_d)
+    prob_df
+
+    expected_stock_price = np.dot(price_df[5], prob_df[5])
+    expected_call_payoff = expected_stock_price - strike_price
+    discount_factor = np.exp(-rf * time_years)
+
+    call_price = expected_call_payoff * discount_factor
+    return call_price
