@@ -52,7 +52,7 @@ def calc_eu_call_price(init_price, time_years, num_iterations, sigma, rf, strike
     prob_df = build_prob_df(num_iterations, q_u, q_d)
     prob_df
 
-    expected_stock_price = np.dot(price_df[5], prob_df[5])
+    expected_stock_price = np.dot(price_df[num_iterations], prob_df[num_iterations])
     expected_call_payoff = expected_stock_price - strike_price
     discount_factor = np.exp(-rf * time_years)
 
