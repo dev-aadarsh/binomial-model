@@ -59,3 +59,23 @@ def calc_eu_call_price(init_price, time_years, num_iterations, sigma, rf, strike
 
     call_price = expected_call_payoff * discount_factor
     return call_price
+
+def calc_eu_put_price(init_price, time_years, num_iterations, sigma, rf, strike_price):
+    period_length = calc_period_length(time_years, num_iterations)
+    up_mul, down_mul = calc_multipliers(sigma, period_length)
+
+    price_df = build_price_df(init_price, up_mul, down_mul, num_iterations)
+    price_df
+
+    q_u, q_d = calc_prob(up_mul, down_mul, rf, period_length)
+
+    prob_df = build_prob_df(num_iterations, q_u, q_d)
+    prob_df
+
+    put_payoff_df = np.maximum(strike_price - price_df[num_iterations], 0)
+    
+    expected_put_payoff = np.dot(put_payoff_df, prob_df[num_iterations])
+    discount_factor = np.exp(-rf * time_years)
+
+    put_price = expected_put_payoff * discount_factor
+    return put_price
